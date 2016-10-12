@@ -84,6 +84,15 @@ require({
     scope.touchMoveCoords = null;
     scope.frameImg = new Image();
 
+    function _guid() {
+        // RFC 4122 Version 4 Compliant solution:
+        // From: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+    }
+
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var search = decodeURIComponent(location.search);
@@ -379,38 +388,49 @@ require({
         _inputForwarder = new inputUtils.InputForwarder(_viewport);
     }
 
-    function _createViewportStreamingConnection() {
+    function _sendRequest(command) {
+        _sendToConsole({
+            id: _guid(),
+            type: command
+        });
+    }
+
+    function _createViewportServerConnection() {
         console.log('Creating viewport streaming connection');
+        _viewportSocket = new WebSocket("ws://" + (window.location.hostname  || "127.0.0.1") + ":" + scope.consolePort + "/viewportserver");
+        _viewportSocket.binaryType = "arraybuffer";
+        _viewportSocket.onmessage = _onViewportMessageReceived;
+        _viewportSocket.onopen = function() {
+            console.log('Connection established with viewport server.');
+            viewportReady(true);
+            setInterval(_sendInputs, 30);
+        };
+        _viewportSocket.onclose = function(/*evt*/) {
+            clearTimeout(scope.requestTimeoutRequest);
+            console.warn('Closed viewport streaming connection.');
+        };
+        _viewportSocket.onerror = function(/*evt*/) {
+            clearTimeout(scope.requestTimeoutRequest);
+            console.error('Viewport streaming web socket error.');
+        };
+    }
+
+    function _createConsoleConnection() {
+        console.log('Creating console connection...');
         _consoleSocket = new WebSocket("ws://" + (window.location.hostname  || "127.0.0.1") + ":" + scope.consolePort);
         _consoleSocket.onmessage = function (evt) {
             var data = JSON.parse(evt.data);
-            console.log("<", data.message);
-            if (options.logs) {
+            if (data.type === "is-ready") {
+                _createViewportServerConnection();
+            } else if (options.logs && data.message) {
                 var newMessageElem = $("<div>" + data.message.replace(/\n/g, "<br/>") + "</div>");
                 $("#logsContainer").append(newMessageElem);
                 newMessageElem[0].scrollIntoView();
             }
         };
-        _consoleSocket.onopen = function(evt) {
-            console.log('Console connection open', evt, _consoleSocket);
-
-            _viewportSocket = new WebSocket("ws://" + (window.location.hostname  || "127.0.0.1") + ":" + scope.consolePort + "/viewportserver");
-            _viewportSocket.binaryType = "arraybuffer";
-            _viewportSocket.onmessage = _onViewportMessageReceived;
-            _viewportSocket.onopen = function() {
-                console.log('Connection established with viewport server.');
-                viewportReady(true);
-            };
-            _viewportSocket.onclose = function(/*evt*/) {
-                clearTimeout(scope.requestTimeoutRequest);
-                console.warn('Closed viewport streaming connection.');
-            };
-            _viewportSocket.onerror = function(/*evt*/) {
-                clearTimeout(scope.requestTimeoutRequest);
-                console.error('Viewport streaming web socket error.');
-            };
-
-            setInterval(_sendInputs, 30);
+        _consoleSocket.onopen = function() {
+            console.log('Console connection open');
+            _sendRequest("is-ready");
         };
         _consoleSocket.onclose = function(evt) {
             console.log('Console connection close', evt);
@@ -482,8 +502,6 @@ require({
              * Initialize and construct the viewport
              */
 
-            // TODO _mouseBehaviour = new IdleMouseBehaviour(_mouseStateSetter);
-
             _initWebGL().then(function () {
                 scope.frameImg.onload = function() {
                     _viewportRender(this);
@@ -500,7 +518,7 @@ require({
                 if (scope.pid) {
 
                     if (scope.pid === "debug") {
-                        return _createViewportStreamingConnection();
+                        return _createConsoleConnection();
                     } else {
                         // Keep a live
                         setInterval(function () {
@@ -512,7 +530,7 @@ require({
                         scope.consolePort = runningInfo.ports.console;
 
                         if (runningInfo.ready) {
-                            _createViewportStreamingConnection();
+                            _createConsoleConnection();
                         } else {
                             _showError("<div><br/>Crunching bits for you...<br/><br/><a href='javascript:window.location.reload();'>Please retry later</a></div>", 5000);
                         }
@@ -540,7 +558,7 @@ require({
                         setInterval(function () { $.post( "/process/" + scope.pid +"/keep-a-live"); }, 10000);
 
                         if (runningInfo.ready) {
-                            _createViewportStreamingConnection();
+                            _createConsoleConnection();
                         } else {
                             _showError("<div><br/>Game is currently compiling...<br/><br/><a href='javascript:window.location.reload();'>Please retry later</a></div>");
                         }
@@ -605,7 +623,6 @@ require({
         }
     }
 
-    var _ready = false;
     function viewportReady(ready) {
         if (!ready) {
             $(".spinner").show();
@@ -619,7 +636,6 @@ require({
             });
             $(".viewport-btn").prop("disabled", false);
         }
-        _ready = ready;
     }
 
     // Expose global functions
