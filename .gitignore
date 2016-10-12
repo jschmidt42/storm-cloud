@@ -2,6 +2,14 @@
 logs
 *.log
 npm-debug.log*
+*.ntvs_analysis.dat
+*.njsperf
+*.etl
+*.etl.tmp
+*.vspx
+bin/
+obj/
+packages/
 
 # Runtime data
 pids
@@ -35,3 +43,5 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+*.dmp
+.idea/workspace.xml

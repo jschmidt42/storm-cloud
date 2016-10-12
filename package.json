@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "Storm Cloud",
+  "description": "Run Stingray Application in the Cloud",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jschmidt42/storm_cloud.git"
+  },
+  "version": "1.0.0",
+  "url": "http://www.stingrayengine.com",
+  "main": "main",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "async": "^1.5.0",
+    "express": "^4.13.3",
+    "fs-extra": "^0.26.5",
+    "lodash": "^3.10.1",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
+    "morgan": "^1.6.1",
+    "multer": "^1.1.0",
+    "node-uuid": "^1.4.3",
+    "nodejs-websocket": "^1.3.0",
+    "portscanner": "^1.0.0",
+    "serve-favicon": "^2.3.0",
+    "unzip": "^0.1.11",
+    "xps": "1.0.2"
+  }
+}

@@ -1,0 +1,188 @@
+/* -----------------------------------*/
+/* -------->>> TOP TOOLBAR <<<--------*/
+/* -----------------------------------*/
+.toolbar {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    background-color: #414345;
+    padding: 2px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    align-items: center;
+}
+
+.toolbar.toolbar-vertical {
+    flex-direction: column;
+    height: 100%;
+    width: 30px;
+	background-color: #353638;
+}
+
+.toolbar .fill {
+    flex: 1;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+.toolbar .fixed,
+.toolbar button {
+    flex: none;
+}
+
+
+/* ---- Multiple toolbars together ---- */
+.toolbar.multiple-toolbar {
+    height: 28px;
+}
+.toolbar.following-toolbar {
+    padding-top: 0px;
+}
+
+/* ---- Sections ---- */
+.toolbar .right-section,
+.toolbar .left-section,
+.toolbar .section,
+.toolbar .top-section,
+.toolbar .bottom-section {
+    white-space: nowrap;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.toolbar .right-section,
+.toolbar .left-section,
+.toolbar .section {
+    flex-direction: row;
+}
+.toolbar .top-section,
+.toolbar .bottom-section {
+    flex-direction: column;
+}
+
+.toolbar .left-section,
+.toolbar .top-section {
+    flex: 1;
+}
+.toolbar .right-section,
+.toolbar .bottom-section {
+    flex: 1;
+    justify-content: flex-end;
+}
+.toolbar .section {
+    flex: 1;
+}
+
+.toolbar.center-toolbar,
+.toolbar .left-section.center-toolbar,
+.toolbar .right-section.center-toolbar,
+.toolbar .section.center-toolbar {
+    justify-content: center;
+}
+
+.toolbar .left-section.fixed,
+.toolbar .right-section.fixed {
+    flex: none;
+}
+
+/* -----------------------------------*/
+/* --------->>> CONTROLS <<<----------*/
+/* -----------------------------------*/
+.toolbar label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 2px 2px 2px 4px;
+    flex: none;
+}
+.toolbar label.disabled {
+    opacity: 0.5;
+}
+
+.toolbar input[type='search'],
+.toolbar input[type='text'],
+.toolbar .adsk-select {
+    margin: 2px;
+    flex: 1;
+    min-width: 50px;
+    display: inline-block;
+}
+
+.toolbar input[type='search'].fixed,
+.toolbar input[type='text'].fixed,
+.toolbar .adsk-select.fixed {
+    flex: none;
+}
+
+.toolbar .link {
+    line-height: 24px;
+    margin: 0px 5px;
+    display: inline-block;
+}
+.toolbar .link.selected,
+.toolbar .link.selected:hover {
+    color: #45b0e6;
+    cursor: default;
+}
+.toolbar .link:hover {
+    color: #c2c5cc;
+    cursor: pointer;
+}
+
+.toolbar .text {
+    line-height: 24px;
+    margin: 0px 5px;
+    display: inline-block;
+}
+
+.toolbar .checkbox-widget {
+    width: 14px;
+    height: 16px;
+    flex: none;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 3px;
+    line-height: 24px;
+}
+
+
+/* ---- Images ---- */
+.toolbar .image {
+    flex: none;
+    display: inline-block;
+}
+
+
+/* ---- Separators ---- */
+.toolbar .separator {
+    display: inline-block;
+    width: 1px;
+    border-right: 1px solid #292a2b;
+    min-width: 1px;
+    height: 20px;
+    margin: 2px 2px;
+}
+.toolbar .separator:after,
+.toolbar .separator1:after {
+    content: '.';
+    visibility: hidden;
+}
+
+/* ---- Spaces ---- */
+.toolbar .adsk-select,
+.toolbar .space1,
+.toolbar .space2,
+.toolbar .space3 {
+    display: inline-block;
+}
+.toolbar .space1 {
+    width: 5px;
+    min-width: 5px;
+}
+.toolbar .space2 {
+    width: 10px;
+    min-width: 10px;
+}
+.toolbar .space3 {
+    width: 15px;
+}

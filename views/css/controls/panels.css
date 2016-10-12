@@ -1,0 +1,147 @@
+/* -----------------------------------*/
+/* ---------->>> COLORS <<<-----------*/
+/* -----------------------------------*/
+.stingray-panel {
+    background-color: #414245;
+}
+.stingray-panel-mid {
+    background-color: #353638;
+}
+.stingray-panel-dark {
+    background-color: #292a2b;
+}
+.stingray-border {
+    border: 1px solid #414245;
+}
+.stingray-border-mid {
+    border: 1px solid #353638;
+}
+.stingray-border-dark {
+    border: 1px solid #292a2b;
+}
+
+.stingray-panel-fade {
+    background-color: #494a4d;
+}
+.stingray-panel-mid-fade {
+    background-color: #3d3e40;
+}
+.stingray-panel-dark-fade {
+    background-color: #303133;
+}
+
+
+/* -----------------------------------*/
+/* ------->>> Flex panels <<<---------*/
+/* -----------------------------------*/
+.panel-flex-vertical {
+    display: flex;
+    flex-direction: column;
+}
+.panel-flex-vertical > div.panel-fill {
+    flex: 1;
+    position: relative;
+}
+.panel-flex-vertical > div.panel-fill > div { /* Ensure flex child can fill 100% height */
+    position: absolute;
+    height: 100%;
+}
+
+.panel-flex-horizontal {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.panel-flex-horizontal > div {
+    height: 100%;
+    position: relative;
+}
+.panel-flex-horizontal > div.panel-fill {
+    flex: 1;
+}
+
+
+/* -----------------------------------*/
+/* ------>>> Panel container <<<------*/
+/* -----------------------------------*/
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.panel-container .panel-header {
+    height: 32px;
+    color: #ffffff;
+    background-color: #414345;
+    margin: 1px 1px 0px 0px;
+}
+.panel-container .panel-content {
+    flex: 1;
+    position: relative;
+    margin: 1px;
+    overflow: hidden;
+}
+.panel-container .panel-header-label {
+    display: inline-block;
+    font-size: 14px;
+    padding: 10px 6px 10px 10px;
+}
+.panel-container .panel-header-label.arrow {
+    padding: 10px 6px 10px 25px;
+    color: #c2c5cc;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-image: url('../../img/controls/arrow-down.png');
+}
+
+/* -----------------------------------*/
+/* ----->>> Collapsible panels <<<----*/
+/* -----------------------------------*/
+.panel-collapsible {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.panel-collapsible .panel-header {
+    height: 32px;
+    background-color: #414345;
+    margin: 1px 1px 0px 0px;
+    cursor: pointer;
+}
+.panel-collapsible .panel-header:hover {
+    background-color: #494a4d;
+}
+.panel-collapsible .panel-header-label {
+    display: inline-block;
+    font-size: 14px;
+    padding: 10px 6px 10px 25px;
+    color: #c2c5cc;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-image: url('../../img/controls/arrow-down.png');
+}
+.panel-collapsible .collapsed {
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-image: url('../../img/controls/arrow-right.png');
+}
+.panel-collapsible .panel-content {
+    flex: 1;
+    position: relative;
+    margin: 1px;
+    overflow: hidden;
+}
+
+
+/* -----------------------------------*/
+/* ----------->>> Misc <<<------------*/
+/* -----------------------------------*/
+.panel-shadow {
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+}
+
+.panel-shadow-inset {
+    box-shadow: inset -1px 4px 9px -6px #222;
+}

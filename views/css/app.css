@@ -1,0 +1,331 @@
+/***
+* Application specific resets.  These styles are applied to the elements
+* that exist in boot.html and define some global preferences like box-sizing
+* but should not contain colors, or any module styles.
+***/
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    cursor: default;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* This style is set from the frontend when showing a loading cursor. */
+body.loading-cursor {
+    cursor: wait;
+}
+
+div.loading-cursor-mask { cursor: wait; z-index: 9999; height: 100%; width: 100%; }
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
+.fullscreen {
+    height: 100%;
+    width: 100%;
+}
+
+/* unvisited link */
+a:link {
+    color: #45b0e6;
+}
+
+/* visited link */
+a:visited {
+    color: #45b0e6;
+}
+
+/* mouse over link */
+a:hover {
+    color: #ffffff;
+}
+
+/* selected link */
+a:active {
+    color: #ffffff;
+}
+
+
+/*/////////////////////////////////////////////////
+// Jasmine reporter style
+/////////////////////////////////////////////////*/
+
+.jasmine_html-reporter {
+    padding: 5px;
+    font-size: 11px;
+    font-family: 'Segoe UI semibold', 'Open Sans', serif;
+    line-height: 14px;
+    color: rgb(194, 197, 204);
+}
+
+.jasmine_html-reporter > a {
+    text-decoration: none;
+    color: #45b0e6;
+}
+
+.jasmine_html-reporter a:hover {
+    text-decoration: underline;
+}
+
+.jasmine_html-reporter #jasmine_content {
+    position: fixed;
+    right: 100%;
+}
+
+.jasmine_html-reporter .banner {
+    display: none;
+}
+
+.jasmine_html-reporter .duration {
+    color: rgb(194, 197, 204);
+    float: right;
+    line-height: 28px;
+    padding-right: 9px;
+}
+
+.jasmine_html-reporter .symbol-summary {
+    overflow: hidden;
+    *zoom: 1;
+    margin: 14px 0;
+}
+
+.jasmine_html-reporter .symbol-summary li {
+    display: inline-block;
+    height: 8px;
+    width: 14px;
+    font-size: 16px;
+}
+
+.jasmine_html-reporter .symbol-summary li.passed {
+    font-size: 14px;
+}
+
+.jasmine_html-reporter .symbol-summary li.passed:before {
+    color: rgb(194, 197, 204);
+    content: "\02022";
+}
+
+.jasmine_html-reporter .symbol-summary li.failed {
+    line-height: 9px;
+}
+
+.jasmine_html-reporter .symbol-summary li.failed:before {
+    color: #ca3a11;
+    content: "\d7";
+    font-weight: bold;
+    margin-left: -1px;
+}
+
+.jasmine_html-reporter .symbol-summary li.disabled {
+    font-size: 14px;
+}
+
+.jasmine_html-reporter .symbol-summary li.disabled:before {
+    color: #bababa;
+    content: "\02022";
+}
+
+.jasmine_html-reporter .symbol-summary li.pending {
+    line-height: 17px;
+}
+
+.jasmine_html-reporter .symbol-summary li.pending:before {
+    color: #ba9d37;
+    content: "*";
+}
+
+.jasmine_html-reporter .symbol-summary li.empty {
+    font-size: 14px;
+}
+
+.jasmine_html-reporter .symbol-summary li.empty:before {
+    color: #ba9d37;
+    content: "\02022";
+}
+
+.jasmine_html-reporter .run-options {
+    float: right;
+    margin-right: 5px;
+    position: relative;
+    line-height: 20px;
+}
+
+.jasmine_html-reporter .run-options .trigger {
+    color: #45b0e6;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.jasmine_html-reporter .run-options .trigger:hover {
+    text-decoration: underline;
+}
+
+.jasmine_html-reporter .run-options .payload {
+    position: absolute;
+    display: none;
+    right: -1px;
+    color: rgb(194, 197, 204);
+    border: 1px solid white;
+    background-color: rgb(65, 66, 69);
+    white-space: nowrap;
+    padding: 4px 8px;
+}
+
+.jasmine_html-reporter .run-options .payload.open {
+    display: block;
+}
+
+.jasmine_html-reporter .bar {
+    line-height: 28px;
+    font-size: 14px;
+    display: block;
+    color: rgb(194, 197, 204);
+}
+
+.jasmine_html-reporter .bar.failed {
+    color: #ca3a11;
+}
+
+.jasmine_html-reporter .bar.skipped {
+    background-color: #bababa;
+}
+
+.jasmine_html-reporter .bar.errored {
+    background-color: #ca3a11;
+}
+
+.jasmine_html-reporter.spec-list .bar.menu.failure-list, .jasmine_html-reporter.spec-list .results .failures {
+    display: none;
+}
+
+.jasmine_html-reporter.failure-list .bar.menu.spec-list, .jasmine_html-reporter.failure-list .summary {
+    display: none;
+}
+
+.jasmine_html-reporter .running-alert {
+    background-color: #666;
+}
+
+.jasmine_html-reporter .results {
+    margin-top: 14px;
+}
+
+.jasmine_html-reporter.showDetails .summaryMenuItem {
+    font-weight: normal;
+    text-decoration: inherit;
+}
+
+.jasmine_html-reporter.showDetails .summaryMenuItem:hover {
+    text-decoration: underline;
+}
+
+.jasmine_html-reporter.showDetails .detailsMenuItem {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.jasmine_html-reporter.showDetails .summary {
+    display: none;
+}
+
+.jasmine_html-reporter.showDetails #details {
+    display: block;
+}
+
+.jasmine_html-reporter .summaryMenuItem {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.jasmine_html-reporter .summary {
+    margin-top: 14px;
+}
+
+.jasmine_html-reporter .summary ul {
+    list-style-type: none;
+    margin-left: 14px;
+    padding-top: 0;
+    padding-left: 0;
+}
+
+.jasmine_html-reporter .summary ul.suite {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.jasmine_html-reporter .summary li.failed a {
+    color: rgb(194, 197, 204);
+    background-color: #ca3a11;
+}
+
+.jasmine_html-reporter .summary li.empty a {
+    color: #ba9d37;
+}
+
+.jasmine_html-reporter .summary li.pending a {
+    color: #ba9d37;
+}
+
+.jasmine_html-reporter .summary li.disabled a {
+    color: #bababa;
+}
+
+.jasmine_html-reporter .description + .suite {
+    margin-top: 0;
+}
+
+.jasmine_html-reporter .suite {
+    margin-top: 14px;
+}
+
+.jasmine_html-reporter .suite a {
+    color: #45b0e6;
+}
+
+.jasmine_html-reporter .failures .spec-detail {
+    margin-bottom: 28px;
+}
+
+.jasmine_html-reporter .failures .spec-detail .description {
+    color: #ca3a11;
+}
+
+.jasmine_html-reporter .failures .spec-detail .description a,
+.jasmine_html-reporter .failure-list > a
+{
+    color: #45b0e6;
+}
+
+.jasmine_html-reporter .result-message {
+    padding-top: 14px;
+    color: rgb(194, 197, 204);
+    white-space: pre;
+}
+
+.jasmine_html-reporter .result-message span.result {
+    display: block;
+}
+
+.jasmine_html-reporter .stack-trace {
+    margin: 5px 0 0 0;
+    max-height: 224px;
+    overflow: auto;
+    line-height: 18px;
+    color: rgb(194, 197, 204);
+    border: 1px solid #ddd;
+    white-space: pre;
+}

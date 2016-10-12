@@ -1,0 +1,530 @@
+/* -----------------------------------*/
+/* ------>>> Input General <<<--------*/
+/* -----------------------------------*/
+input,
+textarea {
+    background-color: #292a2b;
+}
+
+textarea {
+    resize: none;
+}
+
+input::selection,
+textarea::selection {
+    background: #3a82a6;
+}
+
+label.disabled {
+    -webkit-filter: opacity(40%);
+}
+
+
+/* -----------------------------------*/
+/* -------->>> Input Text <<<---------*/
+/* -----------------------------------*/
+input[type='text'],
+input[type='search'],
+input[type='number'],
+input[type='password'],
+textarea {
+    height: 20px;
+    padding: 0px 6px;
+    border: none;
+    border-radius: 2px;
+    color: #C2C5CC;
+    line-height: normal;
+    margin: 0px 2px;
+}
+
+input[type='text'].text-highlight,
+input[type='number'].text-highlight {
+    color: #4985A4;
+}
+
+textarea.multiline2 {
+    height: 40px;
+}
+
+textarea.multiline3 {
+    height: 60px;
+}
+
+input[type='text']:focus,
+input[type='search']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+textarea:focus {
+    box-shadow: 0 0 1px 1px #45a5d5;
+    outline: none;
+}
+
+form.ng-dirty.ng-valid input[type='text']:focus,
+form.ng-dirty.ng-valid input[type='search']:focus,
+form.ng-dirty.ng-valid input[type='number']:focus,
+form.ng-dirty.ng-valid textarea:focus {
+    box-shadow: 0 0 1px 1px #78FA89;
+    outline: none;
+}
+
+form.ng-dirty.ng-invalid input[type='text']:focus,
+form.ng-dirty.ng-invalid input[type='search']:focus,
+form.ng-dirty.ng-invalid input[type='number']:focus,
+form.ng-dirty.ng-invalid input[type='password']:focus,
+form.ng-dirty.ng-invalid textarea:focus,
+textarea.invalid:focus,
+input[type='text'].invalid:focus {
+    box-shadow: 0 0 1px 1px #ff3c3c;
+    outline: none;
+}
+
+
+form input[type='text'].ng-dirty.ng-valid:focus,
+form input[type='search'].ng-dirty.ng-valid:focus,
+form input[type='number'].ng-dirty.ng-valid:focus,
+form textarea.ng-dirty.ng-valid:focus {
+    box-shadow: 0 0 1px 1px #78FA89;
+    outline: none;
+}
+
+form input[type='text'].ng-dirty.ng-invalid,
+form input[type='search'].ng-dirty.ng-invalid,
+form input[type='number'].ng-dirty.ng-invalid,
+form input[type='password'].ng-dirty.ng-invalid,
+form textarea.ng-dirty.ng-invalid,
+textarea.invalid,
+input[type='text'].invalid {
+    box-shadow: 0 0 1px 1px #ff3c3c;
+    outline: none;
+}
+
+
+input[type='text']::-webkit-input-placeholder,
+input[type='search']::-webkit-input-placeholder,
+input[type='number']::-webkit-input-placeholder,
+input[type='password']::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder{
+    color: #616366;
+    font-style: italic;
+}
+
+input[type='text']:disabled,
+input[type='number']:disabled,
+input[type='password']:disabled,
+textarea:disabled {
+    -webkit-filter: opacity(40%);
+}
+
+input[type='text']:read-only,
+input[type='password']:read-only,
+textarea:read-only {
+    font-style: italic;
+}
+
+input[type='text'].error,
+input[type='number'].error,
+input[type='password'].error,
+textarea.error {
+    box-shadow: 0 0 1px 1px #CD5C5C;
+}
+
+textarea {
+    line-height: 20px;
+}
+
+textarea.normal {
+    line-height: normal !important;
+}
+
+.textarea2 {
+    height: 40px;
+}
+.textarea3 {
+    height: 60px;
+}
+.textarea4 {
+    height: 80px;
+}
+.textarea5 {
+    height: 100px;
+}
+.textarea6 {
+    height: 120px;
+}
+
+
+
+/* -----------------------------------*/
+/* ------>>> Input Extensions <<<-----*/
+/* -----------------------------------*/
+div.input-container {
+    position: relative;
+    min-width: 50px;
+    display: inline-block;
+    margin-right: 2px;
+    flex: 1;
+}
+
+/* ---- Clear field ----*/
+div.input-container input.clear-field  {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-right: 12px;
+}
+
+div.input-container.hide-clear i.clear-field {
+    display: none;
+}
+
+div.input-container i.clear-field {
+    position: absolute;
+    right: 0px;
+    top: calc(50% - 8px);
+    color: #414345;
+    cursor: pointer;
+    padding: 3px;
+    height: 100%;
+}
+div.input-container i.clear-field:hover {
+    color: #4b87a6;
+}
+div.input-container[disabled] i.clear-field {
+    display: none;
+}
+
+/* ---- Inner Label ----*/
+div.input-container input.inner-label  {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-right: 12px;
+}
+
+div.input-container label.inner-label {
+    position: absolute;
+    right: 14px;
+    top: 2px;
+    color: #78FA89;
+    padding: 3px;
+    height: 100%;
+}
+
+/* ---- Right to left ---- */
+input.rightToLeft {
+    direction: RTL;
+}
+li.rightToLeft {
+    direction: RTL;
+    overflow: hidden;
+    white-space: nowrap;
+}
+input.rightToLeft span.ellipsis,
+li.rightToLeft span.ellipsis {
+    position: absolute;
+    left: 0;
+    background-color: inherit;
+    padding-left: 5px;
+    padding-bottom: 2px;
+}
+
+
+/* -----------------------------------*/
+/* ------->>> Input Numeric <<<-------*/
+/* ---------->>> Spinner <<<----------*/
+/* -----------------------------------*/
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+
+/* -----------------------------------*/
+/* -------->>> Input range <<<--------*/
+/* ---------->>> Slider <<<-----------*/
+/* -----------------------------------*/
+input[type='range'] {
+    display: inline-block;
+    -webkit-appearance: none;
+    height: 5px;
+    border-radius: 2px;
+    outline: none;
+    width: 100%;
+    margin: 0px 2px;
+}
+input[type='range'].vertical {
+    -webkit-transform: rotate(270deg);
+    width: 100px;
+    margin: 0px;
+}
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    border: 0px solid #999;
+    border-radius: 2px;
+    background: -webkit-linear-gradient(0deg, #c2c5cc 30%, #bbbec4 70%);
+    height: 19px;
+    width: 10px;
+}
+input[type='range']:focus::-webkit-slider-thumb {
+    background: -webkit-linear-gradient(0deg, #52a3cc 30%, #4f9ec5 70%);
+    outline: #4cb5ff auto 5px;
+}
+form.ng-dirty.ng-valid input[type='range']:focus::-webkit-slider-thumb {
+    outline: #78FA89 auto 5px;
+}
+form.ng-dirty.ng-invalid input[type='range']:focus::-webkit-slider-thumb {
+    outline: #FA787E auto 5px;
+}
+input[type='range']:disabled {
+    opacity: 0.4;
+}
+
+
+
+/* -----------------------------------*/
+/* ------->>> Input select <<<--------*/
+/* -------->>> Combo box <<<----------*/
+/* -----------------------------------*/
+.adsk-select {
+    position: relative;
+    margin: 0px;
+    min-width: 50px;
+}
+.adsk-select select {
+    -webkit-appearance: none;
+    width: 100%;
+    min-width: 50px;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    background: linear-gradient(#616366, #5a5b5e);
+    height: 20px;
+    padding: 0px 15px 2px 4px;
+    line-height: 17px;
+    display: inline-block;
+    margin: 0px 2px;
+}
+.adsk-select select[disabled],
+.adsk-select select[disabled]:focus,
+.adsk-select select[disabled]:active {
+    opacity: 0.4;
+    color: #888888;
+}
+
+.adsk-select select:hover {
+    background: linear-gradient(#6b6c70, #636569);
+	cursor: pointer;
+}
+
+.adsk-select select:focus {
+    outline: #4cb5ff auto 5px;
+    background: linear-gradient(#4883a1, #457d9a);
+}
+
+
+form.ng-dirty.ng-valid .adsk-select select:focus {
+    outline: #78FA89 auto 5px;
+}
+form.ng-dirty.ng-invalid .adsk-select select:focus {
+    outline: #FA787E auto 5px;
+}
+
+.adsk-select select.invalid {
+    outline: #FA787E auto 5px;
+}
+
+.adsk-select select.warning {
+    outline: #E2A634 auto 5px;
+}
+
+.adsk-select select:active {
+    background: linear-gradient(#4883a1, #457d9a);
+}
+.adsk-select option,
+.adsk-select optgroup {
+    background-color: #353638;
+    line-height: 20px;
+    height: 20px;
+    padding: 15px;
+}
+.adsk-select .adsk-select-arrow {
+    color: #C2C5CC;
+    position: absolute;
+    margin: 3px 6px;
+    top: 0;
+    right: 0;
+    font-size: 13px;
+    pointer-events: none;
+}
+.adsk-select .adsk-select-arrow[disabled] {
+    color: #888888;
+}
+
+.adsk-select select:focus + .adsk-select-arrow {
+    color: white;
+}
+.adsk-select .adsk-select-no-option {
+    position: absolute;
+    top: 0;
+    padding: 1px 15px 1px 10px;
+    color: #888888;
+    height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    line-height: 17px;
+}
+
+
+/* -----------------------------------*/
+/* ------->>> Color swatch <<<--------*/
+/* -----------------------------------*/
+.adsk-color-swatch canvas {
+    display: inline-block;
+    border-radius: 2px;
+    margin: 2px 2px;
+    cursor: pointer;
+}
+.adsk-color-swatch canvas:focus {
+    outline: #4cb5ff auto 5px;
+}
+.adsk-color-swatch[disabled] canvas {
+    cursor: default;
+}
+.adsk-color-swatch[disabled] canvas:focus {
+    outline: none;
+}
+
+.color-swatch {
+    display: inline-block;
+    border-radius: 2px;
+    margin: 6px 0px 3px 2px;
+    cursor: pointer;
+    height: 19px;
+    max-width: 70px;
+    width: calc(100% - 4px);
+}
+
+.color-swatch.hdr {
+    max-width: none;
+}
+
+/* -----------------------------------*/
+/* ------>>> Color Gradient <<<-------*/
+/* ----------- *to clean -------------*/
+/* -----------------------------------*/
+.mithril-color-gradient canvas {
+    border-radius: 2px;
+    margin: 0px 2px;
+}
+.mithril-color-gradient {
+    width: 100%;
+    height: 10px;
+    margin-top: 2px;
+    line-height: 0px;
+}
+.mithril-color-gradient .color-gradient {
+    width: 100%;
+    height: 80%;
+}
+.mithril-color-gradient .all-color-stops {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: 16px;
+    position: relative;
+}
+.mithril-color-gradient .color-stop {
+    padding: 0;
+    margin: 0;
+    margin-top: 4px;
+    margin-left: -4px;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    position: absolute;
+}
+.mithril-color-gradient .color-stop-arrow {
+    width: 5px;
+    height: 5px;
+    margin: 0;
+    margin-top: -5px;
+    margin-left: 1px;
+    padding: 0;
+}
+.mithril-color-gradient .color-swatch-overlay {
+    position: absolute;
+    height: 15px;
+    width: 10px;
+    background-color: transparent;
+}
+
+
+/* -----------------------------------*/
+/* ------>>> Color Labels <<<---------*/
+/* -----------------------------------*/
+.color-label {
+    display: inline-block;
+    padding: 0px 4px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+.color-label.axis-X {
+    background-color: #AE5544;
+}
+.color-label.axis-Y {
+    background-color: #74996E;
+}
+.color-label.axis-Z {
+    background-color: #568799;
+}
+
+
+/* -----------------------------------*/
+/* --------->>> Badges <<<------------*/
+/* -----------------------------------*/
+.adsk-badge {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 2px;
+    border-radius: 2px;
+    text-decoration: none;
+    text-align: center;
+    outline: 0;
+    line-height: 16px;
+    height: 20px;
+    padding: 1px 3px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    width: 100%;
+    background-color: #414345;
+    border: 1px solid #292a2b;
+}
+
+.adsk-badge.mid {
+    background-color: #3d3e40;
+    border: 1px solid #292a2b;
+}
+
+.adsk-badge.dark {
+    background-color: #292a2b;
+    border: 1px solid #292a2b;
+}
+
+form.ng-dirty input {
+    outline-color: #78FA89;
+}
+
+form input.ng-dirty {
+    outline-color: #78FA89;
+}

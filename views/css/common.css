@@ -1,0 +1,319 @@
+/* -----------------------------------*/
+/* ---------->>> GLOBAL <<<-----------*/
+/* -----------------------------------*/
+body {
+    background-color: #292a2b;
+    color: #c2c5cc;
+    font-family: "Segoe UI semibold", "Open Sans", serif;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+i {
+    font-size: 11px;
+}
+div, span {
+    font-size: 11px;
+}
+
+.highlight {
+    background-color: #345167;
+}
+
+.item-color {
+    background-color: #353638;
+}
+
+.item-color-alternate {
+    background-color: #3d3e40;
+}
+
+
+/* -----------------------------------*/
+/* --------->>> SCROLLBAR <<<---------*/
+/* -----------------------------------*/
+::-webkit-scrollbar {
+    width: 15px;
+    height: 9px;
+}
+::-webkit-scrollbar-track {
+    background-color: #292a2b;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #555659;
+    border: solid 3px #292a2b;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #616366;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #616366;
+}
+::-webkit-scrollbar-button {
+    display: none;
+}
+::-webkit-scrollbar-corner {
+    background-color: #292a2b;
+}
+
+/* -----------------------------------*/
+/* --------->>> POSITION <<<----------*/
+/* -----------------------------------*/
+.pos-abs-middle {
+    position: absolute;
+    left:0; right:0;
+    top:0; bottom:0;
+    margin: auto;
+
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.pos-abs-middle2 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    -webkit-transform: translate(-50%,-50%);
+}
+
+
+
+/***************************************/
+
+/* Spacing for search box on a toolbar */
+#toolbar input[type='search'] {
+    /*margin: 6px;*/
+}
+
+/* Content for use with toolbar */
+#toolbar + #content {
+    overflow: auto;
+    height: calc(100% - 32px);
+}
+
+slider {
+    width: 100%;
+    height: 22px;
+}
+
+slider .track {
+    position: absolute;
+    width: calc(100% - 20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    top: 10px;
+    left: 10px;
+}
+
+slider .thumb {
+    background: #c2c5cc;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    top: 50%;
+    left: 0;
+    -webkit-transform: translate(-50%, -50%);
+}
+
+/* Angular-ui tooltip */
+.tooltip .tooltip-inner {
+    color: #292a2b;
+    background-color: #f2ecce;
+}
+/* Hide arrow */
+.tooltip .tooltip-arrow {
+    display: none;
+}
+
+.btn {
+    color: #ffffff;
+	background: linear-gradient(#616366, #5a5b5e);
+	font-size: 11px;
+    padding: 12px 4px;
+    line-height: 1;
+}
+
+.btn:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    color: #ffffff;
+	background: linear-gradient(#6a6c70, #636569);
+    border-color: transparent;
+    box-shadow: 0 0 2px 1px #45a5d5;
+}
+
+ul.dropdown-menu {
+    background-color: #353638;
+}
+
+.dropdown-menu>li>a {
+    color: #C2C5CC;
+    font-size: 11px;
+}
+
+a {
+    color: #C2C5CC;
+}
+
+
+.divider {
+    border-left:1px solid #292a2b;
+    height:20px;
+    vertical-align: middle;
+}
+
+.toolbar-component  {
+    display: flex;
+    margin-right: 0;
+}
+
+* div .toolbar-component:last-child  {
+    margin-right: 0;
+}
+
+div .button-navigation,
+div .button-filter {
+    display: inline;
+    color: #c2c5cc;
+}
+
+div .button-filter .button-filter-icon {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    padding: 0;
+}
+
+div .button-filter {
+    margin-top: 0;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+}
+
+.button-filter-icon {
+    margin-top: -4px;
+}
+
+#search-folder-input {
+    width: 80%;
+}
+
+#search-folder-input-wide {
+    width: calc(100% - 12px);
+}
+
+/* Engine viewport directive */
+
+.adsk-engine-viewport {
+    background: #292a2b;
+    border: 2px solid #414345;
+    padding: 1px;
+    display: block;
+    height: 100%;
+    position: relative;
+}
+
+.adsk-engine-viewport.active {
+    border-color: #327fa6;
+    background: #292a2b;
+}
+
+.adsk-engine-viewport embed {
+    padding: 1px;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ICONS */
+
+img.tab-close-btn {
+    content: url('../img/icons/tab_close_normal.svg');
+}
+
+img.tab-close-btn:hover {
+    content: url('../img/icons/tab_close_over.svg');
+}
+
+img.tab-close-btn:active {
+    content: url('../img/icons/tab_close_press.svg');
+}
+
+/* PROFILER */
+
+.profiler {
+    position: absolute;
+    z-index: 100;
+    border-radius: 4px;
+    width: auto;
+    height: auto;
+    left: 10px;
+    padding: 5px;
+}
+
+.profiler-init {
+    bottom: 10px;
+}
+
+.profiler .title {
+    color: white;
+    font-weight: bold;
+    line-height: 21px;
+    padding: 0px 5px;
+    border: 1px solid black;
+    background-color: #4b4d4f;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profiler .tool-title {
+    vertical-align: -webkit-baseline-middle;
+}
+
+.profiler .title-bar {
+    height: 27px;
+}
+
+.profiler .info-container {
+    margin: 5px;
+}
+
+.profiler .text-btn {
+    padding: 0px;
+}
+
+.profiler .align-right {
+    position: absolute;
+    right: 0px;
+}
+
+.profiler table td {
+    width: 65px;
+    padding: 2px;
+    white-space: nowrap;
+}
+
+.profiler table td:nth-child(2) {
+    width: 20px;
+}
+
+.profiler table td:not(:first-child) {
+    text-align: right;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+

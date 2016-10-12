@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=600, initial-scale=1">
+    <title>Autodesk Stingray</title>
+    <link rel="stylesheet" href="css/fonts/fonts.css"/>
+    <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/controls.css"/>
+    <link rel="stylesheet" href="css/storm.css"/>
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="3rdParty/jquery/jquery.min.js" type="text/javascript"></script>
+</head>
+<body class="stingray-panel-dark">
+
+    <div class="storm pos-abs-middle2 stingray-panel panel-shadow">
+
+        <div class="panel-flex-vertical fullscreen">
+            <div class="panel-header stingray-panel-mid text-size-big">
+                <img src="img/stingray_small_one_line.png"><br/>
+                <a href="/apps">apps</a> | <a href="/processes">processes</a> | <a href="/version">version</a>
+            </div>
+            <div class="panel-content panel-fill stingray-panel">
+                <div id="itemsContainer" class="lv"></div>
+            </div>
+        </div>
+    </div>
+
+    <form enctype="multipart/form-data" class="upload-form">
+        <input id="file" name="file" type="file" accept=".zip" />
+        <input type="button" value="Upload" />
+    </form>
+
+    <script type="text/template" id="itemTemplate">
+        <div id="{6}" class="li {5}" onclick="{3}" title="{1}">
+            <div class="li-box stingray-panel-mid panel-shadow">
+                <div class="li-object">
+                    <div class="li-icon">
+                        <img src="{2}">
+                    </div>
+                    <div class="li-name">{0}</div>
+                    {4}
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script src="index.js" type="text/javascript"></script>
+
+</body>
+</html>

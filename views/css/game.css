@@ -1,0 +1,176 @@
+.game {
+    text-align: center;
+    border-radius: 6px;
+    width: calc(100% - 60px);
+    height: calc(100% - 60px);
+    max-width: 1280px;
+    max-height: 800px;
+}
+
+.game .panel-header {
+    flex: none;
+    height: auto;
+    font-weight: bold;
+    padding: 7px;
+    border-radius: 6px 6px 0px 0px;
+    border-bottom: 2px solid #292a2b;
+    overflow: hidden;
+}
+.game .panel-header img {
+    max-width: 359px;
+    width: 100%;
+}
+
+.game .panel-content {
+    border-radius: 0px 0px 6px 6px ;
+    overflow-y: auto;
+    margin-bottom: 3px;
+}
+
+.game .panel-container {
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+}
+
+.game .viewport {
+    display: none;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+}
+
+.game .viewport:-webkit-full-screen {
+    width: 100% !important;
+    position: absolute;
+}
+
+.game .canvas-container {
+    width: 100%;
+    height: 100%;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    position: absolute;
+}
+
+.game .viewport-overlay {
+    position: absolute;
+    cursor: default;
+    top: 10px;
+    right: 40px;
+    z-index: 100;
+    display: none;
+}
+
+/* Options */
+.panel-options {
+    display: none;
+    flex: none;
+    height: auto;
+    position: relative;
+    border-top: 1px solid #292a2b;
+}
+
+.panel-options .option {
+    float: right;
+    margin: 5px;
+}
+.panel-options .toolbar {
+    padding-left: 4px;
+    padding-right: 6px;
+}
+
+.panel-options .property-edition {
+    border-top: 1px solid #292a2b;
+}
+
+#btnOptions {
+    float: right;
+    width: 50px;
+    height: 50px;
+    color: #292a2b;
+    font-size: 40px;
+}
+
+#inputQuality {
+    width: 50px;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+.adsk-select {
+
+}
+.adsk-select select {
+    font-size: 11px;
+    padding-top: 1px;
+}
+
+#divCommandLine,
+#divLogs {
+    display:none;
+}
+
+#logsContainer {
+    width: calc(100% - 15px) !important;
+    height: 62px;
+    border-radius: 3px;
+    margin: 2px;
+    margin-bottom: 5px;
+    overflow-y: scroll;
+    line-height: 14px;
+    padding: 2px;
+    -webkit-user-select: text;
+    cursor: text;
+}
+
+.property-label {
+    width: 70px;
+    text-align: right;
+}
+
+.property-control {
+    text-align: left;
+}
+
+.send {
+    padding-top: 2px !important;
+    width: 104px;
+}
+.send button {
+    height: 60px;
+}
+
+button {
+    font-size: 11px;
+}
+
+button i {
+    font-size: 1em;
+    margin-right: 2px;
+}
+
+
+
+/* Spinner */
+.adsk-loading.spinner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.adsk-loading .progress-overlay img {
+    max-width: 500px;
+    text-align: center;
+    overflow: hidden;
+    margin: 10px;
+}
+.adsk-loading .progress-overlay img.spinner-img {
+    width: 50px;
+    height: 50px;
+    opacity: 0.6;
+}
+
+.adsk-loading .progress-overlay img.logo-img {
+    width: 50%;
+}

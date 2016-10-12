@@ -1,0 +1,143 @@
+
+.storm {
+    width: 90%;
+    max-width: 620px;
+    height: 90%;
+    max-height: 260px;
+    border-radius: 6px;
+}
+
+.storm.storm4 {
+    max-height: 450px;
+}
+
+.storm.storm8 {
+    max-width: 800px;
+    max-height: 620px;
+}
+
+.storm.storm15 {
+    max-width: 1000px;
+    max-height: 760px;
+}
+
+.storm.storm24 {
+    max-width: 1700px;
+    max-height: 1000px;
+}
+
+.storm .panel-header {
+    flex: none;
+    height: auto;
+    font-weight: bold;
+    padding: 7px;
+    border-radius: 6px 6px 0px 0px;
+    border-bottom: 2px solid #292a2b;
+    overflow: hidden;
+}
+
+.storm .panel-header img {
+    max-width: 359px;
+    width: 100%;
+}
+
+.storm .panel-content {
+    border-radius: 0px 0px 6px 6px ;
+    overflow-y: auto;
+    margin-bottom: -5px;
+}
+
+
+.storm .lv {
+    font-size: 11px;
+    padding: 5px;
+    height: 100%;
+    width: 100%;
+}
+
+.storm .lv .li {
+    width: 116px;
+    margin: 15px;
+    display: inline-block;
+    text-align: center;
+    word-break: break-all;
+    vertical-align: top;
+    opacity: 0;
+}
+
+
+.storm .lv .li-box {
+    width: 110px;
+    padding: 5px 5px 7px 5px;
+    border-radius: 3px;
+    display: inline-block;
+    cursor: pointer;
+}
+.storm .lv .li-box:not(.disabled):hover {
+    background-color: #293640;
+}
+.storm .lv .li-box:not(.disabled):active {
+    background-color: #345167;
+}
+
+.storm .lv .li.drop-hover .li-box:not(.disabled) {
+    background-color: #397ea6;
+}
+
+.storm .li-box.disabled {
+    opacity: 0.4;
+    cursor: no-drop;
+}
+
+.storm .lv .li-object {
+    overflow: visible;
+    white-space: normal;
+}
+
+
+
+.storm .lv .li-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+    border: 2px solid #414345;
+    background-color: #3d3e40;
+    overflow: hidden;
+    display: inline-block;
+}
+.storm .lv .li-icon img {
+    height: 95px;
+    object-fit: contain;
+    object-position: center center;
+    display: inline;
+    vertical-align: middle;
+}
+
+.storm .lv .folder .list-icon {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+
+.upload-form {
+    position:absolute; top:-100px;
+}
+
+.progress-container {
+    margin-top: 5px;
+    border-radius: 9px 9px 8px 8px;
+    overflow: hidden;
+    display: none;
+}
+.progress {
+    display: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+}
+
+.storm .editor.tile .li-box {
+    background-color: #464749;
+}

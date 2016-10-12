@@ -1,0 +1,12 @@
+/*
+
+Controls are separated in different css files
+
+*/
+
+@import url("controls/inputs.css");
+@import url("controls/properties.css");
+@import url("controls/text.css");
+@import url("controls/toolbars.css");
+@import url("controls/buttons.css");
+@import url("controls/panels.css");

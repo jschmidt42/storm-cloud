@@ -1,0 +1,121 @@
+/* -----------------------------------*/
+/* ---------->>> GLOBAL <<<-----------*/
+/* -----------------------------------*/
+.text {
+    font-size: 11px;
+}
+
+
+/* -----------------------------------*/
+/* ---------->>> COLORS <<<-----------*/
+/* -----------------------------------*/
+.text-normal {
+    color: #c2c5cc;
+}
+.text-error {
+    color: #ff3c3c;
+}
+.text-warning {
+    color: #e2a634;
+}
+.text-information {
+    font-style: italic;
+}
+
+.text-color-white {
+    color: white;
+}
+.text-color-red {
+    color: red;
+}
+.text-color-green {
+    color: green;
+}
+.text-color-orange {
+    color: #e2a634;
+}
+
+.text-color-dimmed {
+    color: #797c81;
+}
+
+.text-size-medium {
+    font-size: 12px;
+}
+.text-size-big {
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.text-no-wrap-ellipsis {
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: center;
+}
+
+.message {
+    padding: 2px;
+}
+
+
+/* -----------------------------------*/
+/* ---------->>> LINKS <<<------------*/
+/* -----------------------------------*/
+.module-asset-browser .link {
+    cursor: pointer;
+}
+.module-asset-browser .link-orange {
+    color: #e2a634;
+    cursor: pointer;
+}
+.module-asset-browser .link-orange:hover {
+    color: #ffa700;
+}
+
+
+/* -----------------------------------*/
+/* ------>>> ICON MESSAGES <<<--------*/
+/* -----------------------------------*/
+.icon-message {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 5px;
+    height: 28px;
+    position: relative;
+}
+.icon-message .icon {
+    flex: none;
+    padding: 4px;
+}
+.icon-message .icon.warning {
+    font-size: 20px;
+    color: #e2a634;
+}
+.icon-message .icon.error {
+    font-size: 20px;
+    color: #ff3c3c;
+}
+.icon-message .icon.information {
+  color: #45b0e6;
+  font-size: 20px;
+}
+.icon-message .message {
+    flex: 1;
+    height: 100%;
+    padding: 0px 10px 0px 5px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    justify-content: space-around;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: center;
+    line-height: 12px;
+    -webkit-line-clamp: 2;
+}

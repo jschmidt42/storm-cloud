@@ -1,0 +1,250 @@
+/* -----------------------------------*/
+/* --------->>> BUTTONS <<<-----------*/
+/* -----------------------------------*/
+button {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 2px;
+    border-radius: 2px;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    background: transparent;
+    outline: 0;
+    line-height: 16px;
+    height: 20px;
+    padding: 0px;
+}
+
+.loading-cursor button {
+    cursor: wait;
+}
+
+
+/* -----------------------------------*/
+/* ------>>> Button types <<<---------*/
+/* -----------------------------------*/
+button.standard-btn,
+button.standard-icon-btn {
+    min-width: 70px;
+    color: #FFFFFF;
+    background: linear-gradient(#616366, #5a5b5e);
+    padding: 0px 6px;
+}
+button.standard-icon-btn {
+    line-height: 20px
+}
+
+button.icon-btn {
+    width: 20px;
+    padding: 0px;
+}
+button.mini-icon-btn {
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    padding: 0px;
+    margin-top: -2px;
+}
+button.small-icon-btn {
+    width: 13px;
+    height: 13px;
+    line-height: 11px;
+    padding: 0px;
+    margin-top: -1px;
+}
+
+button.bg {
+    background: linear-gradient(#616366, #5a5b5e);
+}
+
+
+button.flyout-btn {
+    position: relative;
+}
+
+button.dropdown-btn {
+    position: relative;
+    width: 30px;
+    text-align: left;
+}
+
+button.can-toggle {
+    background: none;
+}
+
+
+/* -----------------------------------*/
+/* ----->>> Button contents <<<-------*/
+/* -----------------------------------*/
+button i {
+    margin: auto auto;
+}
+button.icon-btn i.fa {
+    line-height: 20px;
+    font-size: 1.20em;
+    margin-top: 1px;
+}
+button.icon-btn img {
+    padding: 2px 0px;
+    max-height: 20px;
+    max-width: 20px;
+}
+
+button.standard-icon-btn img {
+    float: left;
+    margin: 2px 4px 2px 0px;
+    max-height: 16px;
+    max-width: 16px;
+}
+button.standard-btn i.fa-right-space {
+    padding-right: 5px;
+}
+
+.btn-size-16 {
+    width: 16px;
+}
+
+button.mini-icon-btn i.fa {
+    line-height: 12px;
+    font-size:1.20em;
+}
+button.mini-icon-btn img {
+    padding: 0px 0px;
+    max-height: 12px;
+    max-width: 12px;
+}
+
+button.small-icon-btn i.fa {
+    line-height: 10px;
+    font-size: 1em;
+}
+
+button.small-icon-btn img {
+    padding: 0px 0px;
+    max-height: 9px;
+    max-width: 9px;
+}
+
+/* -----------------------------------*/
+/* ------>>> Button states <<<--------*/
+/* -----------------------------------*/
+button.toggle-on {
+    background: #292a2b;
+}
+
+button:disabled {
+    opacity: 0.4;
+    color: #292a2b;
+    box-shadow: none;
+}
+button.toggle-on:disabled {
+    background: #292a2b;
+}
+
+
+/* -----------------------------------*/
+/* ------>>> Button events <<<--------*/
+/* -----------------------------------*/
+
+button.standard-btn:not([disabled]):hover,
+button.standard-btn-icon:not([disabled]):hover,
+button.standard-icon-btn:not([disabled]):hover,
+button.hover:not([disabled]):hover {
+    background: linear-gradient(#6a6c70, #636569);
+}
+
+button.icon-btn:not([disabled]):hover {
+    background-color: #5a5b5e;
+}
+
+button.toggle-on:not([disabled]):hover {
+    background-color: #292a2b;
+}
+
+button.default,
+button.default:active,
+button.standard-btn:active,
+button.standard-btn-icon:active,
+button.standard-btn:active:hover,
+button.standard-btn-icon:active:hover {
+    background: linear-gradient(#4883a0, #457d9a);
+}
+
+button.icon-btn:not([disabled]):active,
+button.toggle-on:not([disabled]):active {
+    background-color: #292a2b;
+}
+
+button.icon-btn:not([disabled]):active img,
+button.toggle-on:not([disabled]):active img {
+    -webkit-filter: brightness(65%) sepia(100%) hue-rotate(155deg) saturate(2.9);
+}
+
+button.icon-btn i.fa:not([disabled]):active,
+button.mini-icon-btn i.fa:not([disabled]):active {
+	color: #45b0e6;
+}
+
+button:focus,
+button.default:focus {
+    box-shadow: 0 0 1px 1px #45a5d5;
+}
+
+
+/* -----------------------------------*/
+/* ------>>> Button add-ons <<<-------*/
+/* -----------------------------------*/
+button.flyout-btn > div.flyout-icon,
+button.dropdown-btn > div.flyout-icon {
+     position: absolute;
+     background: url('../../img/controls/arrow_flyout.svg');
+     width: 4px;
+     height: 4px;
+     bottom: 1px;
+     right: 1px;
+}
+button.flyout-btn > div.flyout-icon.bottom-right { }
+button.flyout-btn > div.flyout-icon.top-right {
+    -webkit-transform: rotate(270deg);
+    top: 1px;
+}
+button.flyout-btn > div.flyout-icon.top-left {
+    -webkit-transform: rotate(180deg);
+    top: 1px;
+    left: 1px;
+}
+button.flyout-btn > div.flyout-icon.bottom-left {
+    -webkit-transform: rotate(90deg);
+    left: 1px;
+}
+
+button.dropdown-btn > div.bottom-dropdown {
+    -webkit-transform: rotate(45deg);
+    top: 7px;
+    right: 5px;
+}
+
+button.fill {
+    width: 100%;
+}
+
+
+/* Legacy stuff to delete eventually */
+.button {
+    display: table;
+    border-radius: 2px;
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.button:hover {
+    background: #8c8c8c;
+    text-decoration: none;
+}
+
+.button:focus {
+    outline: none;
+    border: none;
+}

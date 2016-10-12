@@ -1,0 +1,457 @@
+/* -----------------------------------*/
+/* ----->>> Property Edition <<<------*/
+/* -----------------------------------*/
+.property-edition {
+    height: 100%;
+    width: 100%;
+}
+
+
+/* -----------------------------------*/
+/* ---->>> Category container <<<-----*/
+/* -----------------------------------*/
+.property-edition .cat-container {
+    background-color: #414345;
+    border: 1px solid #292a2b;
+    margin-bottom: 10px;
+}
+
+.property-edition.auto-height {
+  height: auto;
+}
+
+/*Bottom border only on last category for accordions*/
+.property-edition.accordion .cat-container,
+.property-edition .cat-container.cat-no-margin {
+    margin-bottom: 0px;
+    border-bottom: none;
+}
+.property-edition.accordion .category-wrapper:last-child .cat-container:last-child {
+    border-bottom: 1px solid #292a2b;
+}
+
+/*Round borders for standalone categories*/
+.property-edition .cat-container.rounded {
+    border-radius: 3px;
+}
+.property-edition .cat-container.rounded .cat-name {
+    border-radius: 3px 3px 0px 0px;
+}
+.property-edition .cat-container.rounded .cat-name.expanded {
+    border-radius: 3px 3px;
+}
+
+/* ---->>> Category checkable <<<-----*/
+.property-edition .cat-container.cat-checkable .cat-name {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 21px;
+}
+.property-edition .cat-container.cat-checkable .cat-name .checkbox-widget {
+    margin-left: -1px;
+    margin-top: -3px;
+}
+.property-edition .cat-container.cat-checkable.disabled .cat-name {
+    color: #c2c5cc;
+}
+
+
+.property-edition .cat-name {
+    color: white;
+    font-weight: bold;
+    line-height: 21px;
+    padding: 0px 5px;
+    background-color: #4b4d4f;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.property-edition .cat-name.fixed {
+    cursor: default;
+}
+
+.property-edition .cat-arrow {
+    color: #c2c5cc;
+    margin-right: 6px;
+    font-size: 9px;
+    width: 6px;
+    text-align: center;
+}
+
+.property-edition .cat-content {
+    padding: 5px;
+}
+.property-edition.full-width .cat-content {
+    padding: 5px 0px 5px 0px;
+}
+.property-edition .cat-content.no-padding {
+    padding: 0px;
+}
+.property-edition .property-row,
+.property-edition .property-row-slim {
+    padding-right: 5px;
+}
+
+
+.property-edition input,
+.property-edition .adsk-select {
+    width: 100%;
+}
+
+
+/* -----------------------------------*/
+/* --------->>> Buttons <<<-----------*/
+/* -----------------------------------*/
+.property-edition .button-row {
+    padding: 0px 0px;
+    margin-bottom: 5px;
+}
+.property-edition .button-row button {
+    float: right;
+    margin: 5px;
+}
+.property-edition .cat-content .button-row {
+    display: inline-block
+}
+
+.dialog .button-row {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+
+/* -----------------------------------*/
+/* --------->>> Labels <<<------------*/
+/* -----------------------------------*/
+.property-edition .property-label {
+    margin-top: 1px;
+    vertical-align: middle;
+    line-height: 27px;
+}
+.property-edition .property-label.disabled {
+    opacity: 0.4;
+}
+/* Label override state */
+.property-edition .property-label.overridden {
+    color: #4cb5ff;
+}
+/* Label before control */
+.property-edition .property-label.prefix {
+    margin-right: 5px;
+}
+/* Label after control */
+.property-edition .property-label.suffix {
+    margin-left: 5px;
+}
+/* Prevent text from wrapping. Display '...' when overflowing */
+.property-edition .property-label.nowrap,
+.property-edition .property-label.nowrap1,
+.property-edition .property-label.nowrap2 {
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.property-edition .property-control.nowrap {
+    white-space: nowrap;
+}
+.property-edition .property-label.nowrap1,
+.property-edition .property-label.nowrap2 {
+    display: flex;
+    flex-direction: column;
+    display: -webkit-box;
+    justify-content: space-around;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: center;
+}
+.property-edition .property-label.nowrap1 {
+    line-height: 16px;
+    -webkit-line-clamp: 1;
+}
+.property-edition .property-label.nowrap2,
+.property-edition .property-control.nowrap2 {
+    line-height: 12px;
+    -webkit-line-clamp: 2;
+}
+.property-edition .property-label.align-center {
+    text-align: center;
+}
+
+.property-edition .property-row-title {
+    color: white;
+}
+
+
+/* -----------------------------------*/
+/* --------->>> Columns <<<-----------*/
+/* -----------------------------------*/
+.property-edition .property-row,
+.property-edition .property-row-1-column {
+    -webkit-column-count: 1;
+}
+.property-edition .property-row-2-columns {
+    -webkit-column-count: 2;
+}
+.property-edition .property-row-3-columns {
+    -webkit-column-count: 3;
+}
+.property-edition .property-row-4-columns {
+    -webkit-column-count: 4;
+}
+
+.property-edition .property-row-2-columns > div,
+.property-edition .property-row-3-columns > div,
+.property-edition .property-row-4-columns > div {
+    -webkit-column-break-inside: avoid;
+}
+
+
+/* -----------------------------------*/
+/* ------->>> Multi Rows <<<----------*/
+/* -----------------------------------*/
+.property-edition .property-rows2 {
+    height: 47px;
+}
+.property-edition .property-rows3 {
+    height: 67px;
+}
+.property-edition .property-rows4 {
+    height: 87px;
+}
+.property-edition .property-rows5 {
+    height: 107px;
+}
+.property-edition .property-rows6 {
+    height: 127px;
+}
+
+/* -----------------------------------*/
+/* -------->>> Container <<<----------*/
+/* -----------------------------------*/
+.property-edition .property-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+/* -----------------------------------*/
+/* ->>> Container Ratios Globals <<<--*/
+/* -----------------------------------*/
+.property-edition .property-container > div,
+.property-edition .flex-50-50 .property-container > div { flex: 1; }
+
+.property-edition .flex-25-75 .property-container > div:nth-child(1) { flex: 0.25; }
+.property-edition .flex-25-75 .property-container > div:nth-child(2) { flex: 0.75; }
+
+.property-edition .flex-75-25 .property-container > div:nth-child(1) { flex: 0.75; }
+.property-edition .flex-75-25 .property-container > div:nth-child(2) { flex: 0.25; }
+
+.property-edition .flex-33-66 .property-container > div:nth-child(1) { flex: 0.33; }
+.property-edition .flex-33-66 .property-container > div:nth-child(2) { flex: 0.67; }
+
+.property-edition .flex-40-60 .property-container > div:nth-child(1) { flex: 0.40; }
+.property-edition .flex-40-60 .property-container > div:nth-child(2) { flex: 0.60; }
+
+.property-edition .flex-66-33 .property-container > div:nth-child(1) { flex: 0.67; }
+.property-edition .flex-66-33 .property-container > div:nth-child(2) { flex: 0.33; }
+
+
+
+/* ----------------------------------------------*/
+/* ->>> Container Ratios Force on container <<<--*/
+/* ----------------------------------------------*/
+.property-edition .property-container.flex-50-50 > div { flex: 1; }
+
+.property-edition .property-container.flex-25-75 > div:nth-child(1) { flex: 0.25; }
+.property-edition .property-container.flex-25-75 > div:nth-child(2) { flex: 0.75; }
+
+.property-edition .property-container.flex-75-25 > div:nth-child(1) { flex: 0.75; }
+.property-edition .property-container.flex-75-25 > div:nth-child(2) { flex: 0.25; }
+
+.property-edition .property-container.flex-33-66 > div:nth-child(1) { flex: 0.33; }
+.property-edition .property-container.flex-33-66 > div:nth-child(2) { flex: 0.67; }
+
+.property-edition .property-container.flex-40-60 > div:nth-child(1) { flex: 0.40; }
+.property-edition .property-container.flex-40-60 > div:nth-child(2) { flex: 0.60; }
+
+.property-edition .property-container.flex-66-33 > div:nth-child(1) { flex: 0.67; }
+.property-edition .property-container.flex-66-33 > div:nth-child(2) { flex: 0.33; }
+
+.property-edition .property-container.flex-custom > div.flex-fill { flex: 1; }
+.property-edition .property-container.flex-custom > div.flex-half { flex: 0.5; }
+.property-edition .property-container.flex-custom > div.flex-none { flex: none; }
+.property-edition .property-container > div.flex-none { flex: none; }
+
+
+
+/* -----------------------------------*/
+/* --->>> Container alignments <<<----*/
+/* -----------------------------------*/
+
+.property-edition .property-container > div.property-control {
+    margin-left: 0px;
+}
+
+.property-edition .property-container > div.property-label {
+    margin-left: 4px;
+}
+
+.property-edition .property-label,
+.property-edition .property-buttons,
+.property-edition .property-control {
+    height: 27px;
+}
+.property-edition .property-control {
+    line-height: 27px;
+    vertical-align: middle;
+    padding: 0px 2px 0px 0px
+}
+.property-edition .property-control.multiline2 {
+    height: 54px;
+}
+
+.property-edition .property-control.multiline3 {
+    height: 74px;
+}
+
+.property-edition .property-row-slim .property-control,
+.property-edition .property-row-slim .property-buttons,
+.property-edition .property-row-slim .property-label {
+    height: 19px;
+    line-height: 19px;
+}
+
+.property-edition .property-buttons {
+    line-height: 27px;
+    vertical-align: middle;
+    padding: 0px 0px 0px 1px
+}
+
+.property-edition .property-buttons button {
+    margin-left: 2px;
+}
+
+.property-edition .property-control.align-center {
+    text-align: center;
+}
+
+.property-control.padLeft5 {
+    padding-left: 5px;
+}
+.property-control.padRight5 {
+    padding-right: 5px;
+}
+.property-control.pad5 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.property-control input.empty {
+    -webkit-user-select: none;
+}
+
+/* -----------------------------------*/
+/* ----->>> Controls Tweaks <<<-------*/
+/* -----------------------------------*/
+.property-edition input,
+.property-edition textarea,
+.property-edition .adsk-select,
+.property-edition form {
+    width: 100%;
+}
+.property-edition textarea {
+    display: inline-block;
+    margin-top: 5px;
+}
+.property-edition .checkbox-widget {
+    display: inline-block;
+    vertical-align: middle;
+}
+.property-edition .adsk-select .adsk-select-arrow {
+    margin-top: 1px;
+}
+.property-edition .adsk-select .adsk-select-no-option {
+    line-height: 27px;
+}
+.property-edition .property-container.property-checkbox-list > div {
+    line-height: 12px;
+}
+
+.property-edition input,
+.property-edition textarea,
+.property-edition .checkbox-widget,
+.property-edition button,
+.property-edition .adsk-select select,
+.property-edition .adsk-color-swatch {
+    margin-right: 2px;
+}
+
+.property-edition input[type='text'].can-drop.drop-hover {
+    box-shadow: 0 0 2px 2px #45a5d5;
+    outline: none
+}
+
+.adsk-color-swatch canvas {
+    margin-top: 5px;
+}
+
+.adsk-slider > div:nth-child(1) {
+    margin-right: 5px;
+}
+.adsk-slider > div:nth-child(2) {
+    margin-right: 2px;
+}
+
+.property-edition .graph {
+    height: 200px;
+}
+.property-edition .graph .property-control {
+    padding: 5px 0px;
+}
+.property-edition .graph .property-control canvas {
+    border: 1px solid #292a2b;
+    border-radius: 2px;
+    margin: 0px 2px;
+}
+
+.property-edition .hdr-color > div:nth-child(2) {
+    margin-left: 8px;
+}
+
+.property-edition .hdr-color .adsk-spinner.show-axis-label .axis-label {
+    display: block;
+    background-color: #5F6164;
+}
+
+
+
+/* -----------------------------------*/
+/* --------->>> Slider <<<------------*/
+/* -----------------------------------*/
+.property-control-slider {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 3px 9px 3px 3px;
+}
+.property-control-slider .slider-label-left,
+.property-control-slider .slider-label-right{
+    width: 15px;
+    padding: 0px 3px;
+}
+.property-control-slider .slider-control {
+    flex: 1;
+    margin-top: 4px;
+    padding: 8px 6px 3px 3px;
+}
+
+
+
+.property-edition .property-container > div.switch {
+    width: 100%;
+}
+.property-edition .property-container adsk-property {
+    width: 100%;
+}
