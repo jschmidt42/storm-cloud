@@ -388,11 +388,27 @@ require({
         _inputForwarder = new inputUtils.InputForwarder(_viewport);
     }
 
-    function _sendRequest(command) {
+    var _requests = {};
+    function _sendRequest(command, timeout) {
+        var id = _guid();
+        _requests[id] = {};
+        _requests[id].promise = new Promise(function (resolve, reject) {
+            var timeoutId = setTimeout(function () {
+                reject('timeout');
+            }, timeout || 1000);
+            _requests[id].resolve = function (args) {
+                clearTimeout(timeoutId);
+                resolve(args);
+            };
+            _requests[id].reject = reject;
+        });
+
         _sendToConsole({
-            id: _guid(),
+            id: id,
             type: command
         });
+
+        return _requests[id].promise;
     }
 
     function _createViewportServerConnection() {
@@ -420,8 +436,9 @@ require({
         _consoleSocket = new WebSocket("ws://" + (window.location.hostname  || "127.0.0.1") + ":" + scope.consolePort);
         _consoleSocket.onmessage = function (evt) {
             var data = JSON.parse(evt.data);
-            if (data.type === "is-ready") {
-                _createViewportServerConnection();
+            if (data.id && _requests.hasOwnProperty(data.id)) {
+                _requests[data.id].resolve(data);
+                delete _requests[data.id];
             } else if (options.logs && data.message) {
                 var newMessageElem = $("<div>" + data.message.replace(/\n/g, "<br/>") + "</div>");
                 $("#logsContainer").append(newMessageElem);
@@ -430,7 +447,10 @@ require({
         };
         _consoleSocket.onopen = function() {
             console.log('Console connection open');
-            _sendRequest("is-ready");
+            _sendRequest("is-ready").then(_createViewportServerConnection).catch(function () {
+                _consoleSocket.close();
+                _createConsoleConnection();
+            });
         };
         _consoleSocket.onclose = function(evt) {
             console.log('Console connection close', evt);
