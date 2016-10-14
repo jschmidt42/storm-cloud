@@ -447,7 +447,7 @@ module.exports = (function() {
             }
 
             var t = new Date();
-            t.setSeconds(t.getSeconds() + 60);
+            t.setSeconds(t.getSeconds() + 21);
             process.keep = t.getTime();
             res.status(200).json(process);
         },

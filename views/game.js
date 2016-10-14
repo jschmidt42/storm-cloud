@@ -224,7 +224,7 @@ require({
     function _getDefaultCaptureOptions(captureMode) {
         if (captureMode === CaptureMode.STREAMED_COMPRESSED) {
             return {
-                quality: 90,
+                quality: parseInt($('#inputQuality').val()),
                 dctMethod: DctMethod.JDCT_IFAST
             };
         }
@@ -297,9 +297,7 @@ require({
             throw new Error("Can't request a frame when the socket is not initialized.");
 
         _viewportSocket.send(JSON.stringify({
-            id: scope.viewportId,
             type: scope.captureMode,
-            //events: eventQueue,
             handle: _viewportHandle,
             options: scope.captureOptions
         }));
@@ -331,7 +329,7 @@ require({
         scope.lastRequestTime = _updateFrameCounter(_.now() - scope.lastRequestTime);
     }
 
-    function _viewportResized() {
+    function _viewportResized(force) {
         _viewport[0].style.width='100%';
         _viewport[0].style.height='100%';
         _viewport[0].width = _viewport[0].offsetWidth;
@@ -342,13 +340,15 @@ require({
 
         gl.viewport(0, 0, _width, _height);
 
-        if((_.now() - scope.lastResizeTime) < 50) {
+        if(!force && (_.now() - scope.lastResizeTime) < 50) {
             clearTimeout(scope.viewportResizeTimeout);
             scope.viewportResizeTimeout = setTimeout(_viewportResized, 100);
             return;
         }
 
         _sendScript("stingray.Window.set_resolution(%d, %d)", _width, _height);
+        if (_viewportSocket)
+            setTimeout(_viewportSocket.send.bind(_viewportSocket, JSON.stringify({message: "resize"})), 50);
 
         scope.lastResizeTime = _.now();
     }
@@ -531,8 +531,6 @@ require({
                     console.warn("Failed to load jpeg image.");
                 };
 
-                _viewportResized();
-
                 // Launch game
                 scope.pid = getParameterByName("pid");
                 if (scope.pid) {
@@ -607,7 +605,7 @@ require({
         _viewport[0].webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         _viewport[0].requestPointerLock();
 
-        _viewportResized();
+        _viewportResized(true);
     }
 
     function togglePointerLock() {
@@ -684,5 +682,10 @@ require({
         setTimeout(function () {
             $("#message-banner").fadeOut("slow");
         }, 3000);
+
+        $('#inputQuality').on('change', function() {
+            scope.captureOptions = _getDefaultCaptureOptions(scope.captureMode);
+            _requestViewportFrame();
+        });
     });
 });
