@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "Storm Cloud",
+  "name": "storm-cloud",
   "description": "Run Stingray Application in the Cloud",
   "repository": {
     "type": "git",
