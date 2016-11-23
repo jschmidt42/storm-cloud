@@ -24,7 +24,6 @@ define(function () {
 
     function InputForwarder(canvas, opts) {
         this.canvas = canvas;
-        this.context = this.canvas[0].getContext('2d');
 
         this.opts = opts || {};
 
@@ -76,7 +75,7 @@ define(function () {
                 return that.captureEvent('keyup', desc);
             });
 
-            this.registerEvent('mousedown', function (e) {
+            this.registerEvent('mousedown touchstart', function (e) {
                 var desc = {
                     button: jsToStingrayButton(e.button)
                 };
@@ -95,7 +94,7 @@ define(function () {
                 return that.captureEvent('mousedown', desc);
             });
 
-            this.registerEvent('mouseup', function (e) {
+            this.registerEvent('mouseup touchend', function (e) {
                 var desc = {
                     button: jsToStingrayButton(e.button)
                 };
@@ -106,11 +105,11 @@ define(function () {
                 return that.captureEvent('mouseup', desc);
             });
 
-            this.registerEvent('mousemove', function (e) {
+            this.registerEvent('mousemove touchmove', function (e) {
                 var desc = {
-                    dx: e.movementX,
-                    dy: e.movementY,
-                    x: e.offsetX,
+                    dx: e.originalEvent.movementX,
+                    dy: e.originalEvent.movementY,
+                    x: e.originalEvent.offsetX,
                     y: that.canvas.height() - e.offsetY
                 };
 
@@ -138,7 +137,7 @@ define(function () {
                 };
             }
 
-            this.canvas[0].addEventListener(type, eventHandler, capture);
+            $(this.canvas[0]).bind(type, eventHandler, capture);
         },
 
         captureEvent: function (type, payload) {

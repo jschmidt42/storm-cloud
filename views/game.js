@@ -7,16 +7,115 @@ require({
         "sylvester": "/3rdparty/sylvester/sylvester",
         "sprintf": "/3rdparty/sprintf/sprintf.min",
         "lodash-ext": "/common/lodash-ext",
-        "common": "/common"
+        "common": "/common",
+        "broadway": "/3rdparty/broadway"
     }
 }, [
     "lodash-ext",
     "common/gl-utils",
     "common/input-utils",
     "common/lua-utils",
-    "sprintf"], function (_, glUtils, inputUtils, luaUtils, sprintf) {
+    "sprintf",
+    "broadway/Player"], function (_, glUtils, inputUtils, luaUtils, sprintf, Player) {
 
     "use strict";
+
+    function H264Player(viewportContainer){
+        var p = new Player({
+            useWorker: true,
+            workerFile: require.toUrl("broadway/Decoder.js")
+        });
+
+        p.canvas.setAttribute("class", "viewport");
+        p.canvas.setAttribute("tabIndex", "1");
+        p.canvas.addEventListener('click', function () {
+
+        });
+
+        p.onPictureDecoded = function () {
+            FPS.tick();
+        };
+
+        p.canvas.addEventListener("webglcontextlost", function (event) {
+            console.log("Lost WebGL Context");
+        });
+
+        viewportContainer[0].append(p.canvas);
+        var parser = new nalParser(p);
+        this.play = function(buffer){
+            parser.parse(buffer);
+        };
+    }
+
+    function nalParser(player){
+        var bufferAr = [];
+        var concatUint8 = function(parAr) {
+            if (!parAr || !parAr.length){
+                return new Uint8Array(0);
+            }
+
+            if (parAr.length === 1){
+                return parAr[0];
+            }
+
+            var completeLength = 0;
+            var i = 0;
+            var l = parAr.length;
+            for (i; i < l; ++i){
+                completeLength += parAr[i].byteLength;
+            }
+
+            var res = new Uint8Array(completeLength);
+            var filledLength = 0;
+
+            for (i = 0; i < l; ++i){
+                res.set(new Uint8Array(parAr[i]), filledLength);
+                filledLength += parAr[i].byteLength;
+            }
+            return res;
+        };
+        this.parse = function(buffer){
+            if (!(buffer && buffer.byteLength)){
+                return;
+            }
+            var data = new Uint8Array(buffer);
+            var hit = function(subarray){
+                if (subarray){
+                    bufferAr.push(subarray);
+                }
+                var buff = concatUint8(bufferAr);
+                player.decode(buff);
+                bufferAr = [];
+            };
+
+            var b = 0;
+            var lastStart = 0;
+
+            var l = data.length;
+            var zeroCnt = 0;
+
+            for (b = 0; b < l; ++b){
+                if (data[b] === 0){
+                    zeroCnt++;
+                }else{
+                    if (data[b] === 1){
+                        if (zeroCnt >= 3){
+                            if (lastStart < b - 3){
+                                hit(data.subarray(lastStart, b - 3));
+                                lastStart = b - 3;
+                            }else if (bufferAr.length){
+                                hit();
+                            }
+                        }
+                    }
+                    zeroCnt = 0;
+                }
+            }
+            if (lastStart < data.length){
+                bufferAr.push(data.subarray(lastStart));
+            }
+        };
+    }
 
     var options = {
         fullscreen: false,
@@ -24,65 +123,139 @@ require({
         logs: false
     };
 
-    var CaptureMode = {
-        CAPTURE_TYPE_UNKNOWN: 0,
-        STREAMED_UNCOMPRESSED: 1,
-        STREAMED_COMPRESSED: 2,
-        STREAMED_COMPRESSED_LZ4: 3
+    var captureOptionsHigh = {
+        b: '8M',
+        minrate: '8M',
+        maxrate: '8M',
+        bufsize: '8M',
+        g: '10',
+        qmin: '0',
+        qmax: '18',
     };
 
-    var DctMethod = {
-        JDCT_ISLOW: 0,
-        JDCT_IFAST: 1,
-        JDCT_FLOAT: 2
+    var captureOptionsMedium = {
+        b: '1M',
+        minrate: '1M',
+        maxrate: '1M',
+        bufsize: '1M',
+        g: '5',
+        qmin: '20',
+        qmax: '30',
     };
 
-    var FpsColor = {
-        VerySlow: 0,
-        Slow: 1,
-        Good: 2,
-        Excellent: 3
+    var captureOptionsLow = {
+        b: '400k',
+        minrate: '400k',
+        maxrate: '400k',
+        bufsize: '400k',
+        g: '1',
+        qmin: '30',
+        qmax: '50',
     };
+
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        captureOptionsHigh = {
+            b: '200k',
+            g: '10',
+            qmin: '20',
+            qmax: '40'
+        }
+
+        captureOptionsMedium = {
+            b: '150k',
+            g: '5',
+            qmin: '30',
+            qmax: '50'
+        }
+
+        captureOptionsLow = {
+            b: '100k',
+            g: '1',
+            qmin: '40',
+            qmax: '50'
+        }
+    }
 
     var scope = {};
 
+    var _viewportContainer = $(".canvas-container");
+    var h264p = new H264Player(_viewportContainer);
     var _viewport = $(".viewport");
-    var _viewportTextureId;
     var _width = 0, _height = 0;
     var _viewportHandle = 1; // 1 = key to access largest swap chain.
     var _consoleSocket = null;
     var _viewportSocket = null;
     var _inputForwarder = null;
-    var gl = _viewport[0].getContext("webgl") || _viewport[0].getContext("experimental-webgl");
-
-    // look up the elements we want to affect
-    var _debugInfoElement = $('.debug-info')[0];
-
-    // Create text nodes to save some time for the browser.
-    var _timeNode = document.createTextNode("");
-    var _sizeNode = document.createTextNode("");
-
-    // Add those text nodes where they need to go
-    _debugInfoElement.appendChild(_timeNode);
-    _debugInfoElement.appendChild(document.createTextNode(" fps - "));
-    _debugInfoElement.appendChild(_sizeNode);
-    _debugInfoElement.appendChild(document.createTextNode(" kb   "));
 
     scope.consolePort = 14030;
-    scope.lastMouseMoveTime = _.now();
-    scope.captureMode = CaptureMode.STREAMED_COMPRESSED;
-    scope.captureOptions = _getDefaultCaptureOptions(scope.captureMode);
-    scope.fpsCounter = 0;
+    scope.captureOptions = _getDefaultCaptureOptions();
     scope.nextFrameTimeout = 0;
-    scope.frameAveragingLength = 60;
-    scope.bufferedTimes = [];
-    scope.fpsColor = -1;
-    scope.bufferedFrameSize = [];
     scope.requestTimeoutRequest = null;
-    scope.lastRequestTime = _.now();
     scope.lastResizeTime = _.now();
-    scope.touchMoveCoords = null;
-    scope.frameImg = new Image();
+    scope.desiredRate = 10;
+
+    var FPS = {
+        _fps: 0,
+        _frameCount: 0,
+        _intervalId: null,
+        _bandwidth: 0,
+        _bandwidthSizes: [],
+        init: function () {
+            if (FPS._intervalId)
+                clearTimeout(FPS._intervalId);
+
+            // Create text nodes to save some time for the browser.
+            var _timeNode = document.createTextNode("");
+            var _sizeNode = document.createTextNode("");
+
+            // Add those text nodes where they need to go
+            var _debugInfoElement = $('.debug-info');
+            _debugInfoElement.empty();
+            _debugInfoElement.append(_timeNode);
+            _debugInfoElement.append(document.createTextNode(" fps - "));
+            _debugInfoElement.append(_sizeNode);
+            _debugInfoElement.append(document.createTextNode(" kb/s  "));
+
+            FPS._intervalId = setInterval(function () {
+                FPS._fps = FPS._frameCount;
+                FPS._frameCount = 0;
+
+                FPS._bandwidth = 0;
+                for (var s of FPS._bandwidthSizes) {
+                    FPS._bandwidth += s;
+                }
+                FPS._bandwidthSizes.length = 0;
+
+                _timeNode.nodeValue = FPS._fps.toFixed(1);
+                _sizeNode.nodeValue = (FPS._bandwidth/ 1024).toFixed(1) ;
+                _debugInfoElement[0].style.color = FPS.color();
+            }, 1000);
+        },
+
+        color: function () {
+            var fpsColor = "red";
+            if (FPS._fps >= 24) {
+                fpsColor = "chartreuse";
+            } else if (FPS._fps > 20) {
+                fpsColor = "YellowGreen";
+            } else if (FPS._fps > 5) {
+                fpsColor = "yellow";
+            }
+            return fpsColor;
+        },
+
+        tick: function () {
+            ++FPS._frameCount;
+        },
+
+        current: function () {
+            return FPS._fps;
+        },
+
+        newPacket: function (size) {
+            FPS._bandwidthSizes.push(size);
+        }
+    };
 
     function _guid() {
         // RFC 4122 Version 4 Compliant solution:
@@ -101,195 +274,15 @@ require({
         return (results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")));
     }
 
-    function _initShaders() {
-        return Promise.all([
-            glUtils.getShader(gl, "/shaders/viewport-streaming.fs", "x-shader/x-fragment"),
-            glUtils.getShader(gl, "/shaders/viewport-streaming.vs", "x-shader/x-vertex")
-        ]).then(function (shaders) {
-            var fragmentShader = shaders[0];
-            var vertexShader = shaders[1];
-            var shaderProgram = gl.createProgram();
-            gl.attachShader(shaderProgram, vertexShader);
-            gl.attachShader(shaderProgram, fragmentShader);
-            gl.linkProgram(shaderProgram);
+    function _getDefaultCaptureOptions() {
+        var quality = parseInt($('#inputQuality').val());
 
-            if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-                throw new Error("Can't link shader");
-            }
-
-            gl.useProgram(shaderProgram);
-
-            scope.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-            gl.enableVertexAttribArray(scope.vertexPositionAttribute);
-
-            scope.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-            gl.enableVertexAttribArray(scope.textureCoordAttribute);
-
-            scope.shaderProgram = shaderProgram;
-        });
-    }
-
-    function _initBuffers() {
-        scope.squareVerticesBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, scope.squareVerticesBuffer);
-
-        var vertices = [
-            1.0,  1.0,  0.0,
-            -1.0, 1.0,  0.0,
-            1.0,  -1.0, 0.0,
-            -1.0, -1.0, 0.0
-        ];
-
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-        scope.squareVerticesTextureCoordBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, scope.squareVerticesTextureCoordBuffer);
-
-        var texCoord = [
-            1.0, 0.0,
-            0.0, 0.0,
-            1.0, 1.0,
-            0.0, 1.0
-        ];
-
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoord), gl.STATIC_DRAW);
-    }
-
-    function _initWebGL() {
-        gl.clearColor(0.152, 0.156, 0.160, 1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
-        gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); // jshint ignore:line
-
-        _viewportTextureId = gl.createTexture();
-
-        gl.bindTexture(gl.TEXTURE_2D, _viewportTextureId);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-
-        return _initShaders().then(function () {
-            _initBuffers();
-
-            scope.perspectiveMatrix = glUtils.makeOrtho(-1, 1, -1, 1, 0.0, 1.0);
-            scope.mvMatrix = Matrix.I(4);
-
-            var pUniform = gl.getUniformLocation(scope.shaderProgram, "uPMatrix");
-            gl.uniformMatrix4fv(pUniform, false, new Float32Array(scope.perspectiveMatrix.flatten()));
-
-            var mvUniform = gl.getUniformLocation(scope.shaderProgram, "uMVMatrix");
-            gl.uniformMatrix4fv(mvUniform, false, new Float32Array(scope.mvMatrix.flatten()));
-
-            scope.uSamplerLocation = gl.getUniformLocation(scope.shaderProgram, "uSampler");
-        });
-    }
-
-    function _getFrameHeader(frameBuffer) {
-        return {
-            size: _.toInt32(frameBuffer[0], frameBuffer[1], frameBuffer[2], frameBuffer[3]),
-            width: _.toInt32(frameBuffer[4], frameBuffer[5], frameBuffer[6], frameBuffer[7]),
-            height: _.toInt32(frameBuffer[8], frameBuffer[9], frameBuffer[10], frameBuffer[11]),
-            bpp: _.toInt32(frameBuffer[12], frameBuffer[13], frameBuffer[14], frameBuffer[15]),
-            colorBufferSize: _.toInt32(frameBuffer[16], frameBuffer[17], frameBuffer[18], frameBuffer[19]),
-            compressedColorBufferSize: _.toInt32(frameBuffer[20], frameBuffer[21], frameBuffer[22], frameBuffer[23]),
-            depthBufferSize: _.toInt32(frameBuffer[24], frameBuffer[25], frameBuffer[26], frameBuffer[27])
-        };
-    }
-
-    function _getFrameData(frameBuffer) {
-        var header = _getFrameHeader(frameBuffer);
-        var colorBuffer = frameBuffer.subarray(header.size);
-        return {
-            header:header,
-            colorBuffer: colorBuffer
-        };
-    }
-
-    function _drawTexture() {
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, _viewportTextureId);
-        gl.uniform1i(scope.uSamplerLocation, 0);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, scope.squareVerticesBuffer);
-        gl.vertexAttribPointer(scope.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, scope.squareVerticesTextureCoordBuffer);
-        gl.vertexAttribPointer(scope.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
-
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    }
-
-    function _getDefaultCaptureOptions(captureMode) {
-        if (captureMode === CaptureMode.STREAMED_COMPRESSED) {
-            return {
-                quality: parseInt($('#inputQuality').val()),
-                dctMethod: DctMethod.JDCT_IFAST
-            };
+        switch (quality) {
+            case 0: return captureOptionsLow;
+            case 1: return captureOptionsMedium;
+            case 2: return captureOptionsHigh;
+            default: return captureOptionsHigh;
         }
-        return {};
-    }
-
-    function _updateFrameSize(frameSize) {
-        // This function could be optimized a little
-        if (scope.bufferedFrameSize.length >= scope.frameAveragingLength) {
-            scope.bufferedFrameSize.shift();
-        }
-        scope.bufferedFrameSize.push(frameSize);
-
-        var mean = 0;
-        scope.bufferedFrameSize.forEach(function(size) {
-            mean += size;
-        });
-        mean = mean / scope.bufferedFrameSize.length / 1024;
-
-        _sizeNode.nodeValue = mean.toFixed(1);
-    }
-
-    /**
-     * Updates label to display the frame counters
-     * @TODO This function could be optimized a little
-     * @param timeToRender delta time between each render
-     * @private
-     */
-    function _updateFrameCounter(timeToRender) {
-        if (scope.bufferedTimes.length >= scope.frameAveragingLength) {
-            scope.bufferedTimes.shift();
-        }
-        scope.bufferedTimes.push(timeToRender);
-
-        var meanTime = 0;
-        scope.bufferedTimes.forEach(function(time) {
-            meanTime += time;
-        });
-        meanTime = meanTime / scope.bufferedTimes.length;
-        scope.fpsCounter = 1000 / meanTime;
-
-        var fps = scope.fpsCounter.toFixed(1);
-        if (fps > 30) {
-            if (scope.fpsColor !== FpsColor.Excellent) {
-                scope.fpsColor = FpsColor.Excellent;
-                _debugInfoElement.style.color = "chartreuse";
-            }
-        } else if (fps > 20) {
-            if (scope.fpsColor !== FpsColor.Good) {
-                scope.fpsColor = FpsColor.Good;
-                _debugInfoElement.style.color = "YellowGreen";
-            }
-        } else if (fps > 5) {
-            if (scope.fpsColor !== FpsColor.Slow) {
-                scope.fpsColor = FpsColor.Slow;
-                _debugInfoElement.style.color = "yellow";
-            }
-        } else if (fps <= 5 && scope.fpsColor !== FpsColor.VerySlow) {
-            scope.fpsColor = FpsColor.VerySlow;
-            _debugInfoElement.style.color = "red";
-        }
-
-        _timeNode.nodeValue = fps;
-
-        return _.now();
     }
 
     function _requestViewportFrame() {
@@ -297,7 +290,7 @@ require({
             throw new Error("Can't request a frame when the socket is not initialized.");
 
         _viewportSocket.send(JSON.stringify({
-            type: scope.captureMode,
+            id: 0,
             handle: _viewportHandle,
             options: scope.captureOptions
         }));
@@ -311,24 +304,6 @@ require({
         }
     }
 
-    function _viewportRender(image) {
-
-        if (image instanceof Image) {
-            gl.bindTexture(gl.TEXTURE_2D, _viewportTextureId);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-            _drawTexture();
-        } else if (image.blob) {
-            var imageBytes = new Uint8Array(image.blob);
-            gl.bindTexture(gl.TEXTURE_2D, _viewportTextureId);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, image.width, image.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, imageBytes);
-            _drawTexture();
-        } else {
-            throw new Error('Image format not supported');
-        }
-
-        scope.lastRequestTime = _updateFrameCounter(_.now() - scope.lastRequestTime);
-    }
-
     function _viewportResized(force) {
         _viewport[0].style.width='100%';
         _viewport[0].style.height='100%';
@@ -337,8 +312,6 @@ require({
 
         _width = _viewport[0].width;
         _height = _viewport[0].height;
-
-        gl.viewport(0, 0, _width, _height);
 
         if(!force && (_.now() - scope.lastResizeTime) < 50) {
             clearTimeout(scope.viewportResizeTimeout);
@@ -363,24 +336,10 @@ require({
         }
 
         var frameBuffer = new Uint8Array(evt.data);
-        var frame = _getFrameData(frameBuffer);
 
-        _updateFrameSize(frameBuffer.length);
+        FPS.newPacket(frameBuffer.length)
 
-        if (scope.captureMode === CaptureMode.STREAMED_UNCOMPRESSED) {
-            _viewportRender({
-                blob: frame.colorBuffer,
-                width: frame.header.width,
-                height: frame.header.height,
-                bpp: frame.header.bpp,
-                size: frame.header.colorBufferSize
-            });
-        } else if (scope.captureMode === CaptureMode.STREAMED_COMPRESSED) {
-            var blob = new Blob([frame.colorBuffer], {type: 'image/jpeg'});
-            scope.frameImg.src = URL.createObjectURL(blob);
-        } else {
-            throw new Error('Not supported');
-        }
+        h264p.play(frameBuffer);
     }
 
     function _initInputForwarding () {
@@ -389,7 +348,7 @@ require({
     }
 
     var _requests = {};
-    function _sendRequest(command, timeout) {
+    function _sendRequest(command, argumentList, timeout) {
         var id = _guid();
         _requests[id] = {};
         _requests[id].promise = new Promise(function (resolve, reject) {
@@ -405,15 +364,16 @@ require({
 
         _sendToConsole({
             id: id,
-            type: command
+            type: command,
+            arg: argumentList
         });
 
         return _requests[id].promise;
     }
 
-    function _createViewportServerConnection() {
+    function _createViewportServerConnection(viewportServerPort) {
         console.log('Creating viewport streaming connection');
-        _viewportSocket = new WebSocket("ws://" + (window.location.hostname  || "127.0.0.1") + ":" + scope.consolePort + "/viewportserver");
+        _viewportSocket = new WebSocket("ws://" + (window.location.hostname  || "127.0.0.1") + ":" + viewportServerPort);
         _viewportSocket.binaryType = "arraybuffer";
         _viewportSocket.onmessage = _onViewportMessageReceived;
         _viewportSocket.onopen = function() {
@@ -447,7 +407,8 @@ require({
         };
         _consoleSocket.onopen = function() {
             console.log('Console connection open');
-            _sendRequest("is-ready").then(_createViewportServerConnection).catch(function () {
+            var viewportServerPort = scope.consolePort + 10000;
+            _sendRequest('viewport_server', {'start': viewportServerPort}).then(() => {_createViewportServerConnection(viewportServerPort);}).catch(function () {
                 _consoleSocket.close();
                 _createConsoleConnection();
             });
@@ -518,73 +479,59 @@ require({
                 window.addEventListener("pagehide", _viewportDestroyed, false);
             }
 
-            /**
-             * Initialize and construct the viewport
-             */
+            // Launch game
+            scope.pid = getParameterByName("pid");
+            if (scope.pid) {
 
-            _initWebGL().then(function () {
-                scope.frameImg.onload = function() {
-                    _viewportRender(this);
-                    URL.revokeObjectURL(scope.frameImg.src);
-                };
-                scope.frameImg.onerror = function() {
-                    console.warn("Failed to load jpeg image.");
-                };
+                if (scope.pid === "debug") {
+                    return _createConsoleConnection();
+                } else {
+                    // Keep a live
+                    setInterval(function () {
+                        $.post("/process/" + scope.pid + "/keep-a-live");
+                    }, 10000);
+                }
 
-                // Launch game
-                scope.pid = getParameterByName("pid");
-                if (scope.pid) {
+                $.getJSON("/process/" + scope.pid, function(runningInfo) {
+                    scope.consolePort = runningInfo.ports.console;
 
-                    if (scope.pid === "debug") {
-                        return _createConsoleConnection();
+                    if (runningInfo.ready) {
+                        _createConsoleConnection();
                     } else {
-                        // Keep a live
-                        setInterval(function () {
-                            $.post("/process/" + scope.pid + "/keep-a-live");
-                        }, 10000);
+                        _showError("<div><br/>Crunching bits for you...<br/><br/><a href='javascript:window.location.reload();'>Please retry later</a></div>", 5000);
+                    }
+                }).fail(function() {
+                    var rerunUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?path=' + appName;
+                    _showError("<div><br/>Can't find process (" + scope.pid + ")<br/><br/><a href='" + rerunUrl + "'>Re-run</a> | <a href='/'>Return</a></div>");
+                });
+
+            } else {
+                $.getJSON("/run/" + appName, function(runningInfo) {
+                    console.warn("Running", runningInfo);
+
+                    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?path=' + appName + '&pid=' + runningInfo.pid;
+                    if (history.pushState) {
+                        window.history.pushState({path:newUrl},'',newUrl);
+                    } else {
+                        window.location.href = newUrl;
                     }
 
-                    $.getJSON("/process/" + scope.pid, function(runningInfo) {
-                        scope.consolePort = runningInfo.ports.console;
+                    scope.consolePort = runningInfo.ports.console;
 
-                        if (runningInfo.ready) {
-                            _createConsoleConnection();
-                        } else {
-                            _showError("<div><br/>Crunching bits for you...<br/><br/><a href='javascript:window.location.reload();'>Please retry later</a></div>", 5000);
-                        }
-                    }).fail(function() {
-                        var rerunUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?path=' + appName;
-                        _showError("<div><br/>Can't find process (" + scope.pid + ")<br/><br/><a href='" + rerunUrl + "'>Re-run</a> | <a href='/'>Return</a></div>");
-                    });
+                    scope.pid = runningInfo.pid;
 
-                } else {
-                    $.getJSON("/run/" + appName, function(runningInfo) {
-                        console.warn("Running", runningInfo);
+                    // Keep a live
+                    setInterval(function () { $.post( "/process/" + scope.pid +"/keep-a-live"); }, 10000);
 
-                        var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?path=' + appName + '&pid=' + runningInfo.pid;
-                        if (history.pushState) {
-                            window.history.pushState({path:newUrl},'',newUrl);
-                        } else {
-                            window.location.href = newUrl;
-                        }
-
-                        scope.consolePort = runningInfo.ports.console;
-
-                        scope.pid = runningInfo.pid;
-
-                        // Keep a live
-                        setInterval(function () { $.post( "/process/" + scope.pid +"/keep-a-live"); }, 10000);
-
-                        if (runningInfo.ready) {
-                            _createConsoleConnection();
-                        } else {
-                            _showError("<div><br/>Game is currently compiling...<br/><br/><a href='javascript:window.location.reload();'>Please retry later</a></div>");
-                        }
-                    }).fail(function() {
-                        _showError("<div><br/>Can't launch application<br/><br/><a href='/'>Return</a></div>");
-                    });
-                }
-            });
+                    if (runningInfo.ready) {
+                        _createConsoleConnection();
+                    } else {
+                        _showError("<div><br/>Game is currently compiling...<br/><br/><a href='javascript:window.location.reload();'>Please retry later</a></div>");
+                    }
+                }).fail(function() {
+                    _showError("<div><br/>Can't launch application<br/><br/><a href='/'>Return</a></div>");
+                });
+            }
         }).fail(function() {
             _showError("<div><br/>No application named " + appName + "<br/><br/><a href='/'>Return</a></div>");
         });
@@ -651,8 +598,39 @@ require({
             $(".viewport, .viewport-overlay").show(function () {
                 _viewportResized();
                 scope.requestTimeoutRequest = setTimeout(_requestViewportFrame, 0);
+                _sendScript('stingray.Application.set_time_step_policy("throttle", 60)');
+                _sendScript('stingray.Window.show_cursor(true)');
+                _sendScript('stingray.Window.clip_cursor(false)');
             });
             $(".viewport-btn").prop("disabled", false);
+
+            const ranges = [5, 15, 24, 30, 45, 60];
+            setInterval(() => {
+                var throttleRate = FPS._fps + 5;
+                var dr = scope.desiredRate;
+                for (let r of ranges) {
+                    if (throttleRate >= r)
+                        dr = r;
+                    else if (throttleRate < r)
+                        break;
+                }
+                if (scope.desiredRate != dr) {
+                    scope.desiredRate = dr;
+                    _sendScript(`stingray.Application.set_time_step_policy("throttle", ${dr.toFixed(0)})`);
+                }
+            }, 5000);
+
+            setInterval(() => {
+                let ri = ranges.findIndex(r => {
+                    return r > scope.desiredRate;
+                });
+                if (ri !== -1 && ri < ranges.length) {
+                    scope.desiredRate = ranges[ri];
+                    _sendScript(`stingray.Application.set_time_step_policy("throttle", ${scope.desiredRate.toFixed(0)})`);
+                }
+            }, scope.desiredRate * 1000);
+
+            FPS.init();
         }
     }
 
@@ -684,8 +662,10 @@ require({
         }, 3000);
 
         $('#inputQuality').on('change', function() {
-            scope.captureOptions = _getDefaultCaptureOptions(scope.captureMode);
-            _requestViewportFrame();
+            scope.captureOptions = _getDefaultCaptureOptions();
+            if (_viewportSocket)
+                _viewportSocket.send(JSON.stringify({message: "options", options: scope.captureOptions}))
+            //_requestViewportFrame();
         });
     });
 });
